@@ -1,2 +1,2 @@
 # octoBuddy
-Web version from goctobot
+Web version from [goctobot](../goctobot)
