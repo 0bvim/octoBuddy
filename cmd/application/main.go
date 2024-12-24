@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -29,8 +30,8 @@ func main() {
 
 	logger := initLogger()
 
-	println(ctx)
-	println(logger)
+	fmt.Println(ctx)
+	fmt.Println(logger)
 	// connect db
 
 	// run migrations
