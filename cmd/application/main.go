@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/0bvim/octoBuddy/internal/router"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -11,7 +12,11 @@ import (
 )
 
 func init() {
-	godotenv.Load()
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+		return
+	}
 }
 
 func initLogger() *log.Logger {
@@ -19,16 +24,24 @@ func initLogger() *log.Logger {
 	if err != nil {
 		log.Fatalf("Failed to open log file: %v", err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			_ = fmt.Errorf("failed to close log file: %v", err)
+		}
+	}(file)
 
 	// Configure the logger
 	return log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
+
 func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
 	logger := initLogger()
+
+	router.Initialize()
 
 	fmt.Println(ctx)
 	fmt.Println(logger)
