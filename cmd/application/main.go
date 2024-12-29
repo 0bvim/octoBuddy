@@ -1,14 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"github.com/0bvim/octoBuddy/internal/router"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
 )
 
 func init() {
@@ -19,6 +16,7 @@ func init() {
 	}
 }
 
+// TODO: implement logger with context
 func initLogger() *log.Logger {
 	file, err := os.OpenFile("tmp/app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
@@ -36,23 +34,5 @@ func initLogger() *log.Logger {
 }
 
 func main() {
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
-
-	logger := initLogger()
-
 	router.Initialize()
-
-	fmt.Println(ctx)
-	fmt.Println(logger)
-	// connect db
-
-	// run migrations
-
-	// seed if exists
-
-	// redis or mongo
-
-	// health  check
-
 }
