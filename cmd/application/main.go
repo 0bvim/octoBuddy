@@ -16,6 +16,7 @@ func init() {
 	}
 }
 
+// TODO: implement logger with context
 func initLogger() *log.Logger {
 	file, err := os.OpenFile("tmp/app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
