@@ -1,71 +1,29 @@
 package router
 
 import (
+	"github.com/0bvim/octoBuddy/internal/delivery/http/handler"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func initializeRoutes(router *gin.Engine) {
 	user := router.Group("/:user") // ':name' notation are to indicates a variable
 	{
-		user.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "General user status like followers and following and so forth",
-			})
-		})
-		user.GET("/followers", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong1",
-			})
-		})
-		user.GET("/following", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong2",
-			})
-		})
-		user.GET("/status", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong3",
-			})
-		})
+		user.GET("/", handler.GetUser)
+		user.GET("/followers", handler.GetUserFollowers)
+		user.GET("/following", handler.GetUserFollowing)
+		user.GET("/status", handler.GetStatus)
 	}
 
 	group := router.Group("/me")
 	{
-		group.GET("/", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "General information about logged user",
-			})
-		})
-		group.GET("/followers", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong4",
-			})
-		})
-		group.GET("/following", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "pong5",
-			})
-		})
-		group.GET("/allow-list", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "list of users that are allowed",
-			})
-		})
-		group.POST("/allow-list", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "include of users that are allowed",
-			})
-		})
-		group.GET("/deny-list", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "Get list of users that are denied",
-			})
-		})
-		group.POST("/deny-list", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"message": "Post Deny List",
-			})
-		})
+		group.GET("/", handler.GetMe)
+		group.GET("/followers", handler.ListFollowers)
+		group.GET("/following", handler.ListFollowing)
+		group.GET("/allow-list", handler.GetAllowList)
+		group.POST("/allow-list", handler.AddAllowList)
+		group.DELETE("/allow-list", handler.DeleteAllowList)
+		group.GET("/deny-list", handler.GetDenyList)
+		group.POST("/deny-list", handler.AddDenyList)
+		group.DELETE("/deny-list", handler.DeleteDenyList)
 	}
 }
