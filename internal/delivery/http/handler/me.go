@@ -16,7 +16,7 @@ func ListFollowers(ctx *gin.Context) {
 
 func ListFollowing(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
-		"message": "success on list following",
+		"message": "success on list following.",
 	})
 }
 
