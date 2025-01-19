@@ -2,10 +2,31 @@ package router
 
 import (
 	"github.com/0bvim/octoBuddy/internal/delivery/http/handler"
+	"github.com/0bvim/octoBuddy/internal/router/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func initializeRoutes(router *gin.Engine) {
+	// Protected routes
+	protected := router.Group("/user")
+	protected.Use(middleware.AuthMiddleware())
+	{
+		protected.GET("/profile", handler.ProfileHandler)
+	}
+
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Home page",
+		})
+	})
+
+	login := router.Group("/login")
+	{
+		login.GET("auth/github", handler.LoginHandler)
+		login.GET("auth/github/callback", handler.CallbackHandler)
+		login.GET("logout", handler.LogoutHandler)
+	}
+
 	user := router.Group("/:user") // ':name' notation are to indicates a variable
 	{
 		user.GET("/", handler.GetUser)
