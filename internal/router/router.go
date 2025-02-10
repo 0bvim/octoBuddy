@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/0bvim/octoBuddy/internal/router/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,9 @@ type Server struct {
 
 func Initialize(ctx context.Context) *Server {
 	router := gin.Default()
+
+	// Apply CORS middleware globally
+	router.Use(middleware.CORSMiddleware())
 
 	// TODO: setup trusted proxies
 	initializeRoutes(router)

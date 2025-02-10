@@ -71,7 +71,7 @@ func CallbackHandler(c *gin.Context) {
 
 	// Store user info in session/context
 	c.Set("user", user)
-	
+
 	// Set access token in cookie
 	c.SetCookie("access_token", token.AccessToken, 3600, "/", "", false, true)
 
