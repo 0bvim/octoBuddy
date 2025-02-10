@@ -7,13 +7,6 @@ import (
 )
 
 func initializeRoutes(router *gin.Engine) {
-	// Public routes
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Home page",
-		})
-	})
-
 	router.GET("/login", handler.LoginHandler)
 	router.GET("/callback", handler.CallbackHandler)
 	router.GET("/logout", handler.LogoutHandler)
