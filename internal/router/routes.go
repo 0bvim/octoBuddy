@@ -20,12 +20,9 @@ func initializeRoutes(router *gin.Engine) {
 		})
 	})
 
-	login := router.Group("/login")
-	{
-		login.GET("auth/github", handler.LoginHandler)
-		login.GET("auth/github/callback", handler.CallbackHandler)
-		login.GET("logout", handler.LogoutHandler)
-	}
+	router.GET("/login", handler.LoginHandler)
+	router.GET("/callback", handler.CallbackHandler)
+	router.GET("/logout", handler.LogoutHandler)
 
 	user := router.Group("/:user") // ':name' notation are to indicates a variable
 	{
