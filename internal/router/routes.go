@@ -7,27 +7,13 @@ import (
 )
 
 func initializeRoutes(router *gin.Engine) {
-	// Protected routes
-	protected := router.Group("/user")
-	protected.Use(middleware.AuthMiddleware())
-	{
-		protected.GET("/profile", handler.ProfileHandler)
-	}
+	router.GET("/login", handler.LoginHandler)
+	router.GET("/callback", handler.CallbackHandler)
+	router.GET("/logout", handler.LogoutHandler)
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Home page",
-		})
-	})
-
-	login := router.Group("/login")
-	{
-		login.GET("auth/github", handler.LoginHandler)
-		login.GET("auth/github/callback", handler.CallbackHandler)
-		login.GET("logout", handler.LogoutHandler)
-	}
-
-	user := router.Group("/:user") // ':name' notation are to indicates a variable
+	// Protected user routes
+	user := router.Group("/:user")
+	user.Use(middleware.AuthMiddleware())
 	{
 		user.GET("/", handler.GetUser)
 		user.GET("/followers", handler.GetUserFollowers)
@@ -35,16 +21,18 @@ func initializeRoutes(router *gin.Engine) {
 		user.GET("/status", handler.GetStatus)
 	}
 
-	group := router.Group("/me")
+	// Protected me routes
+	me := router.Group("/me")
+	me.Use(middleware.AuthMiddleware())
 	{
-		group.GET("/", handler.GetMe)
-		group.GET("/followers", handler.ListFollowers)
-		group.GET("/following", handler.ListFollowing)
-		group.GET("/allow-list", handler.GetAllowList)
-		group.POST("/allow-list", handler.AddAllowList)
-		group.DELETE("/allow-list", handler.DeleteAllowList)
-		group.GET("/deny-list", handler.GetDenyList)
-		group.POST("/deny-list", handler.AddDenyList)
-		group.DELETE("/deny-list", handler.DeleteDenyList)
+		me.GET("/", handler.GetMe)
+		me.GET("/followers", handler.ListFollowers)
+		me.GET("/following", handler.ListFollowing)
+		me.GET("/allow-list", handler.GetAllowList)
+		me.POST("/allow-list", handler.AddAllowList)
+		me.DELETE("/allow-list", handler.DeleteAllowList)
+		me.GET("/deny-list", handler.GetDenyList)
+		me.POST("/deny-list", handler.AddDenyList)
+		me.DELETE("/deny-list", handler.DeleteDenyList)
 	}
 }

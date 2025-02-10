@@ -1,11 +1,26 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"net/http"
 
-func GetMe(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{
-		"message": "Get Me",
-	})
+	"github.com/gin-gonic/gin"
+)
+
+func GetMe(c *gin.Context) {
+	accessToken := GetAccessToken(c)
+	if accessToken == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No access token provided"})
+		return
+	}
+
+	user, err := GetGitHubUser(accessToken)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Failed to get user info: %v", err)})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
 }
 
 func ListFollowers(ctx *gin.Context) {
