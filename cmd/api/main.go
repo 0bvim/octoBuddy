@@ -9,16 +9,15 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/0bvim/octoBuddy/config"
 	"github.com/0bvim/octoBuddy/internal/delivery/http/handler"
 	"github.com/0bvim/octoBuddy/internal/router"
-	"github.com/joho/godotenv"
 )
 
 func init() {
-	err := godotenv.Load()
+	config, err := config.LoadConfig()
 	if err != nil {
-		fmt.Println("Error loading .env file")
-		return
+		log.Fatalf("Failed to load config: %v", err)
 	}
 
 	handler.InitOAuthConfig()
