@@ -10,6 +10,7 @@ import (
 type Config struct {
 	GithubClientID     string
 	GithubClientSecret string
+	GithubRedirectURL  string
 	JWTSecret          string
 }
 
@@ -22,6 +23,7 @@ func LoadConfig() (*Config, error) {
 	config := &Config{
 		GithubClientID:     os.Getenv("GITHUB_CLIENT_ID"),
 		GithubClientSecret: os.Getenv("GITHUB_CLIENT_SECRET"),
+		GithubRedirectURL:  os.Getenv("GITHUB_REDIRECT_URL"),
 		JWTSecret:          os.Getenv("JWT_SECRET"),
 	}
 

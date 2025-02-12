@@ -1,63 +1,46 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"log"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 
 	"github.com/0bvim/octoBuddy/config"
-	"github.com/0bvim/octoBuddy/internal/delivery/http/handler"
-	"github.com/0bvim/octoBuddy/internal/router"
+	"github.com/0bvim/octoBuddy/internal/application/service"
+	"github.com/0bvim/octoBuddy/internal/infrastructure/auth/github"
+	"github.com/0bvim/octoBuddy/internal/infrastructure/auth/jwt"
+	"github.com/0bvim/octoBuddy/internal/infrastructure/persistence/memory"
+	"github.com/0bvim/octoBuddy/internal/interfaces/api/handlers"
+	"github.com/0bvim/octoBuddy/internal/interfaces/api/middleware"
+	"github.com/0bvim/octoBuddy/internal/interfaces/api/routes"
+	"github.com/gin-gonic/gin"
 )
 
-func init() {
+func main() {
+	// Load configuration
 	config, err := config.LoadConfig()
 	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
+		log.Fatal("Cannot load config:", err)
 	}
 
-	handler.InitOAuthConfig()
-}
+	// Initialize infrastructure
+	githubClient := github.NewGithubClient(config)
+	tokenService := jwt.NewTokenService(config.JWTSecret)
+	userRepo := memory.NewUserRepository()
 
-// TODO: implement logger with context
-func initLogger() *log.Logger {
-	file, err := os.OpenFile("tmp/app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("Failed to open log file: %v", err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			_ = fmt.Errorf("failed to close log file: %v", err)
-		}
-	}(file)
+	// Initialize services
+	authService := service.NewAuthService(githubClient, tokenService, userRepo)
 
-	// Configure the logger
-	return log.New(file, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-}
+	// Initialize HTTP server and middleware
+	engine := gin.Default()
+	authMiddleware := middleware.NewAuthMiddleware(tokenService)
 
-func main() {
-	// Create a context that we'll use to gracefully shutdown our application
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
+	// Initialize handlers
+	authHandler := handlers.NewAuthHandler(authService)
+	userHandler := handlers.NewUserHandler()
 
-	// Initialize the router with our context
-	server := router.Initialize(ctx)
+	// Setup routes
+	router := routes.NewRouter(engine, authHandler, userHandler, authMiddleware)
+	router.Setup()
 
-	// Wait for shutdown signal
-	<-ctx.Done()
-
-	// Create a timeout context for graceful shutdown
-	timeoutCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	if err := server.Shutdown(timeoutCtx); err != nil {
-		log.Printf("Server forced to shutdown: %v", err)
-	}
-
-	log.Println("Server exiting")
+	// Start server
+	log.Fatal(engine.Run(":8080"))
 }
