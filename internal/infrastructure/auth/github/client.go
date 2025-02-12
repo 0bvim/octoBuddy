@@ -19,7 +19,7 @@ func NewGithubClient(config *config.Config) *Client {
 	oauthConfig := &oauth2.Config{
 		ClientID:     config.GithubClientID,
 		ClientSecret: config.GithubClientSecret,
-		RedirectURL:  "http://localhost:8080/callback",
+		RedirectURL:  config.GithubRedirectURL,
 		Scopes: []string{
 			"user:follow",
 			"read:user",
