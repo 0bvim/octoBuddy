@@ -1,5 +1,6 @@
-package domain
+package entity
 
-type Token struct {
-	AccessToken string `json:"access_token"`
+type TokenPair struct {
+	AccessToken  string
+	RefreshToken string
 }

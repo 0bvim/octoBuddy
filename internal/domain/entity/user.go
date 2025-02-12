@@ -1,9 +1,9 @@
-package domain
+package entity
 
 import "time"
 
 // GitHubUser represents the structure of the GitHub user API response.
-type GitHubUser struct {
+type User struct {
 	Login             string    `json:"login"`
 	ID                int       `json:"id"`
 	NodeID            string    `json:"node_id"`
