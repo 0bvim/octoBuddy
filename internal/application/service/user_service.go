@@ -16,3 +16,7 @@ func NewUserService(userRepo repository.UserRepository) *UserService {
 func (s *UserService) GetUser(id string) (*entity.User, error) {
 	return s.userRepo.FindByID(id)
 }
+
+func (s *UserService) FetchFollowers(token string) ([]entity.Follower, error) {
+	return s.userRepo.FetchFollowers(token)
+}

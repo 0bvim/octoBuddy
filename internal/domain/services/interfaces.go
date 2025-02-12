@@ -10,4 +10,6 @@ type AuthService interface {
 
 type UserService interface {
     GetUser(id string) (*entity.User, error)
+	GetUserFollowers(id string) ([]entity.User, error)
+	GetUserFollowing(id string) ([]entity.User, error)
 }

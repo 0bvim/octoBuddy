@@ -28,6 +28,7 @@ func main() {
 
 	// Initialize services
 	authService := service.NewAuthService(githubClient, tokenService, userRepo)
+	userService := service.NewUserService(userRepo)
 
 	// Initialize HTTP server and middleware
 	engine := gin.Default()
@@ -35,7 +36,7 @@ func main() {
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(authService)
-	userHandler := handlers.NewUserHandler()
+	userHandler := handlers.NewUserHandler(userService)
 
 	// Setup routes
 	router := routes.NewRouter(engine, authHandler, userHandler, authMiddleware)

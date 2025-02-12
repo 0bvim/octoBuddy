@@ -4,8 +4,9 @@ import "time"
 
 // GitHubUser represents the structure of the GitHub user API response.
 type User struct {
+	Follower          []Follower
+	Followed          []Followed
 	Login             string    `json:"login"`
-	ID                int       `json:"id"`
 	NodeID            string    `json:"node_id"`
 	AvatarURL         string    `json:"avatar_url"`
 	GravatarID        string    `json:"gravatar_id"`
@@ -21,19 +22,34 @@ type User struct {
 	EventsURL         string    `json:"events_url"`
 	ReceivedEventsURL string    `json:"received_events_url"`
 	Type              string    `json:"type"`
-	SiteAdmin         bool      `json:"site_admin"`
 	Name              string    `json:"name"`
 	Company           string    `json:"company"`
 	Blog              string    `json:"blog"`
 	Location          string    `json:"location"`
 	Email             string    `json:"email"`
-	Hireable          bool      `json:"hireable"`
 	Bio               string    `json:"bio"`
 	TwitterUsername   string    `json:"twitter_username"`
+	ID                int       `json:"id"`
 	PublicRepos       int       `json:"public_repos"`
 	PublicGists       int       `json:"public_gists"`
 	Followers         int       `json:"followers"`
 	Following         int       `json:"following"`
+	SiteAdmin         bool      `json:"site_admin"`
+	Hireable          bool      `json:"hireable"`
 	CreatedAt         time.Time `json:"created_at"`
 	UpdatedAt         time.Time `json:"updated_at"`
+}
+
+type Follower struct {
+	Login     string `json:"login"`
+	AvatarURL string `json:"avatar_url"`
+	ID        int    `json:"id"`
+	HTMLURL   string `json:"html_url"`
+}
+
+type Followed struct {
+	Login     string `json:"login"`
+	AvatarURL string `json:"avatar_url"`
+	ID        int    `json:"id"`
+	HTMLURL   string `json:"html_url"`
 }
