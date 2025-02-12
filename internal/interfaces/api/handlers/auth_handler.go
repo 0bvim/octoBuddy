@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/0bvim/octoBuddy/internal/application/dto"
@@ -32,21 +34,23 @@ func (h *AuthHandler) GithubCallback(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"tokens": dto.TokenResponse{
-			AccessToken:  tokenPair.AccessToken,
-			RefreshToken: tokenPair.RefreshToken,
-		},
-		"user": dto.UserResponse{
-			ID:        strconv.Itoa(user.ID),
-			Login:     user.Login,
-			Name:      user.Name,
-			Email:     user.Email,
-			AvatarURL: user.AvatarURL,
-			Followers: user.Followers,
-			Following: user.Following,
-		},
-	})
+	// Construct the redirect URL with query parameters
+	redirectURL := fmt.Sprintf(
+		"http://localhost:3000/auth/callback?token=%s&refresh_token=%s&user_id=%s&login=%s&name=%s&email=%s&avatar_url=%s&followers=%s&following=%s&mail=%s",
+		url.QueryEscape(tokenPair.AccessToken),
+		url.QueryEscape(tokenPair.RefreshToken),
+		url.QueryEscape(strconv.Itoa(user.ID)),
+		url.QueryEscape(user.Login),
+		url.QueryEscape(user.Name),
+		url.QueryEscape(user.Email),
+		url.QueryEscape(user.AvatarURL),
+		url.QueryEscape(strconv.Itoa(user.Followers)),
+		url.QueryEscape(strconv.Itoa(user.Following)),
+		url.QueryEscape(user.Email),
+	)
+
+	// Redirect to the new URL
+	c.Redirect(http.StatusFound, redirectURL)
 }
 
 func (h *AuthHandler) RefreshToken(c *gin.Context) {

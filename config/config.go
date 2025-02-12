@@ -7,6 +7,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const (
+	FOLLOWING_URL = "https://api.github.com/users/%s/following?per_page=100"
+	FOLLOWERS_URL = "https://api.github.com/users/%s/followers?per_page=100"
+)
+
 type Config struct {
 	GithubClientID     string
 	GithubClientSecret string
