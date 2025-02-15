@@ -13,3 +13,4 @@ run:
 
 clean:
 	@rm -f $(BIN_DIR)/$(APP_NAME)
+
