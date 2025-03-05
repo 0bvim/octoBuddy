@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/0bvim/octoBuddy/config"
 	"github.com/0bvim/octoBuddy/internal/application/service"
@@ -43,5 +44,5 @@ func main() {
 	router.Setup()
 
 	// Start server
-	log.Fatal(engine.Run(":8080"))
+	log.Fatal(engine.Run(os.Getenv("PORT")))
 }

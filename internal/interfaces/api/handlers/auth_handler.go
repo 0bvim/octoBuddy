@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 
 	"github.com/0bvim/octoBuddy/internal/application/dto"
@@ -36,7 +37,7 @@ func (h *AuthHandler) GithubCallback(c *gin.Context) {
 
 	// Construct the redirect URL with query parameters
 	redirectURL := fmt.Sprintf(
-		"http://localhost:3000/auth/callback?token=%s&refresh_token=%s&user_id=%s&login=%s&name=%s&email=%s&avatar_url=%s&followers=%s&following=%s&mail=%s",
+		os.Getenv("REDIRECT_URL"),
 		url.QueryEscape(tokenPair.AccessToken),
 		url.QueryEscape(tokenPair.RefreshToken),
 		url.QueryEscape(strconv.Itoa(user.ID)),
