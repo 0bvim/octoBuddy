@@ -22,8 +22,6 @@ func main() {
 		log.Fatal("Cannot load config:", err)
 	}
 
-  var name string
-
 	// Initialize infrastructure
 	githubClient := github.NewGithubClient(config)
 	tokenService := jwt.NewTokenService(config.JWTSecret)
