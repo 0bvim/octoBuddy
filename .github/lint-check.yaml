@@ -1,0 +1,33 @@
+name: Lint check
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  workflow_dispatch:
+  pull_request:
+    types:
+      ["opened", "closed", "synchronize"]
+    branches:
+      - '**'
+
+jobs:
+  setup-and-generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          version: latest
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
