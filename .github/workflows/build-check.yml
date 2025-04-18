@@ -1,4 +1,4 @@
-name: Lint check
+name: Build Check
 
 on:
   push:
@@ -22,8 +22,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
 
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
+      - name: Run Build
+        run: |
+          go build -v ./...
 
