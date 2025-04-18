@@ -1,8 +1,6 @@
 APP_NAME := octoBuddy
 BIN_DIR := bin
 
-.PHONY: all build run clean
-
 all: clean build run
 
 build:
@@ -13,3 +11,5 @@ run:
 
 clean:
 	@rm -f $(BIN_DIR)/$(APP_NAME)
+
+.PHONY: all build run clean
