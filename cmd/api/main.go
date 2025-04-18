@@ -19,9 +19,10 @@ func main() {
 	// Load configuration
 	config, err := config.LoadConfig()
 	if err != nil {
-
 		log.Fatal("Cannot load config:", err)
 	}
+
+  var name string
 
 	// Initialize infrastructure
 	githubClient := github.NewGithubClient(config)
