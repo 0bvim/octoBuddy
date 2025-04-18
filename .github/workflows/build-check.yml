@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  setup-and-generate:
+  build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 

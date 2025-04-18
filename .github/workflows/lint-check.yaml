@@ -12,7 +12,7 @@ on:
       - '**'
 
 jobs:
-  setup-and-generate:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
