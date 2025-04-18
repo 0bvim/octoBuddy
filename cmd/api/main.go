@@ -23,6 +23,7 @@ func main() {
 	}
 
   var name string
+  var name1 string
 
 	// Initialize infrastructure
 	githubClient := github.NewGithubClient(config)
