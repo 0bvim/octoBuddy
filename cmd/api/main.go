@@ -19,6 +19,7 @@ func main() {
 	// Load configuration
 	config, err := config.LoadConfig()
 	if err != nil {
+
 		log.Fatal("Cannot load config:", err)
 	}
 
