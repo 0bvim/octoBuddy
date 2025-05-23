@@ -1,0 +1,27 @@
+name: Build Check
+
+permissions:
+  contents: read
+
+on:
+  workflow_run:
+    workflows: ["Lint check"]
+    types:
+      - completed
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+
+      - name: Run Build
+        run: |
+          go build -v ./...
+

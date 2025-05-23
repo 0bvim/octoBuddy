@@ -26,4 +26,12 @@ go.work.sum
 
 # ide files
 .idea
-tmp
+
+# temp files
+tmp/
+
+# binary files
+bin/
+
+# log files
+log/
