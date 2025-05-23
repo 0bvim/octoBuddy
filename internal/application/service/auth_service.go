@@ -9,6 +9,11 @@ import (
 	"github.com/0bvim/octoBuddy/internal/infrastructure/auth/jwt"
 )
 
+import (
+	"crypto/rand"
+	"encoding/base64"
+)
+
 type AuthService struct {
 	githubClient *github.Client
 	tokenService *jwt.TokenService
@@ -28,7 +33,9 @@ func NewAuthService(
 }
 
 func (s *AuthService) GetAuthURL() string {
-	return s.githubClient.GetAuthCodeURL("state-token")
+	state := generateRandomState()
+	// TODO: Store the state in a secure location (e.g., session or database) for validation during callback.
+	return s.githubClient.GetAuthCodeURL(state)
 }
 
 func (s *AuthService) HandleCallback(code string) (*entity.TokenPair, *entity.User, error) {
@@ -73,4 +80,13 @@ func (s *AuthService) RefreshToken(refreshToken string) (*entity.TokenPair, erro
 	}
 
 	return s.tokenService.GenerateTokenPair(user)
+}
+
+func generateRandomState() string {
+	b := make([]byte, 16) // 16 bytes = 128 bits
+	_, err := rand.Read(b)
+	if err != nil {
+		panic("failed to generate random state") // Handle error appropriately in production
+	}
+	return base64.URLEncoding.EncodeToString(b)
 }
