@@ -24,9 +24,11 @@ jobs:
 
       - name: Set up Go
         uses: actions/setup-go@v4
+        with:
+          go-version: "1.24.x"
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: latest
+          version: v1.64.8
 
